@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { HStack, IconButton, VStack, useTheme, Text, Heading, FlatList, Center } from 'native-base';
 import { SignOut, ChatTeardropText } from 'phosphor-react-native';
 
@@ -12,11 +13,25 @@ export function Home() {
   
   const [ statusSelected, setStatusSelected ] = useState<'open' | 'closed'>('open');
   const [orders, setOrders] = useState<OrderProps[]>([
-    
-  
+    {
+      id: '123',
+      patrimony: '123456',
+      when: '26/07/2022',
+      status: 'open'
+    }
   ]);
 
+  const navigation = useNavigation();
+
   const { colors } = useTheme();
+
+  function handleNewOrder(){
+    navigation.navigate('new');
+  }
+
+  function handleOpenDetails(orderId: string){
+    navigation.navigate('details', { orderId })
+  }
 
   return (
     <VStack flex={1} pb={6} bg='gray.700'>
@@ -67,7 +82,7 @@ export function Home() {
           <FlatList
             data={orders}
             keyExtractor={ item => item.id}
-            renderItem={({ item }) => <Order data={item} />}
+            renderItem={({ item }) => <Order data={item} onPress={() => handleOpenDetails(item.id) }/>}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 100 }}
             ListEmptyComponent={() => (
@@ -75,13 +90,13 @@ export function Home() {
                 <ChatTeardropText color={colors.gray[300]} size={40}/>
                 <Text color='gray.200' fontSize='xl' mt={6} textAlign='center'>
                   Voce ainda nao possui {'\n'}
-                  solicitacoes
+                  solicitacoes {statusSelected === 'open' ? 'em andamento' : 'finalizadas'}
                 </Text>
               </Center>
             )}
           />
 
-          <Button title='Nova Solicitacao'/>        
+          <Button title='Nova Solicitacao' onPress={handleNewOrder}/>        
 
         </VStack>
 
