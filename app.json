@@ -11,6 +11,7 @@
     ],
     "android": {
       "package": "com.help",
+      "versionCode": 1,
       "googleServicesFile": "./google-services.json"
     }
   }
